@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#071719">
+<title>AHAD VAI PROXY</title>
+<style>
+:root{color-scheme:dark;--bg:#071719;--panel:#102629;--teal:#35e0c0;--muted:#a4bfbd;--line:#244447}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#123638 0,#071719 58%);font:16px/1.5 system-ui,sans-serif;color:#effffb;display:grid;place-items:center;padding:22px}
+main{width:min(100%,520px)}.brand{font-weight:900;letter-spacing:.08em;color:var(--teal);font-size:clamp(1.5rem,6vw,2.2rem);text-align:center;margin:0 0 6px}.sub{text-align:center;color:var(--muted);margin:0 0 24px}.card{background:linear-gradient(160deg,#102a2c,#0b1d1f);border:1px solid var(--line);border-radius:22px;padding:clamp(20px,5vw,30px);box-shadow:0 20px 65px #0006}.field{display:grid;gap:8px;margin:16px 0}label{color:#d5e9e6;font-weight:650}input{width:100%;padding:14px 15px;border-radius:12px;border:1px solid #315456;background:#061719;color:white;font:inherit;outline:none}input:focus{border-color:var(--teal);box-shadow:0 0 0 3px #35e0c022}button{border:0;border-radius:12px;padding:13px 16px;font:inherit;font-weight:700;cursor:pointer;min-height:48px}.primary{background:var(--teal);color:#06201e;width:100%}.secondary{background:#183b3d;color:#e8fffa;border:1px solid #315456;width:100%}.hidden{display:none!important}.msg{margin-top:14px;padding:12px;border-radius:10px;background:#183537;color:#e6fffa;overflow-wrap:anywhere}.msg.error{background:#401e24;color:#ffdada}.pill{display:inline-block;padding:5px 10px;border-radius:99px;background:#123f36;color:#72f3cb;font-weight:800;font-size:.82rem}.pill.expired{background:#43252a;color:#ffaaaa}.stat{padding:15px;border-radius:14px;background:#091a1c;border:1px solid var(--line);margin:12px 0}.stat small{display:block;color:var(--muted)}.time{font-size:clamp(1.5rem,6vw,2.1rem);font-weight:850;color:var(--teal);font-variant-numeric:tabular-nums}.muted{color:var(--muted);font-size:.92rem}footer{text-align:center;color:#73918f;font-size:.8rem;margin-top:18px}
+</style></head>
+<body><main>
+<h1 class="brand">AHAD VAI PROXY</h1><p class="sub">Pass subscription access</p>
+<section class="card" id="loginCard"><h2>Pass login</h2><p class="muted">Enter the passcode given by the administrator.</p>
+<form id="loginForm"><div class="field"><label for="passcode">Passcode</label><input id="passcode" type="password" required maxlength="200" autocomplete="current-password" placeholder="Enter passcode"></div><button class="primary" id="loginBtn">Sign in</button></form><div id="loginMsg" class="msg hidden" role="status"></div></section>
+<section class="card hidden" id="dashCard"><div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><h2>Your subscription</h2><span id="statusPill" class="pill">Active</span></div>
+<div class="stat"><small>Remaining time</small><div id="countdown" class="time">—</div></div><div class="stat"><small>Expires at</small><strong id="expiry">—</strong></div>
+<p class="muted">This page checks pass data stored in this browser only. It cannot verify a VPN connection.</p>
+<button class="primary" id="happBtn">ADD TO HAPP</button><div id="happMsg" class="msg hidden" role="status"></div><p><button class="secondary" id="logoutBtn">Log out</button></p></section>
+<footer>AHAD VAI PROXY · Local demo mode</footer></main>
+<script>
+const STORE="ahadProxyPassesV1",SESSION="ahadProxyCurrentPass";
+const $=id=>document.getElementById(id);let timer;
+function readPasses(){try{return JSON.parse(localStorage.getItem(STORE)||"[]")}catch{return []}}
+function savePasses(p){localStorage.setItem(STORE,JSON.stringify(p))}
+function msg(id,text,error=false){const e=$(id);e.textContent=text;e.classList.remove("hidden","error");if(error)e.classList.add("error")}
+function showLogin(){if(timer)clearInterval(timer);$("loginCard").classList.remove("hidden");$("dashCard").classList.add("hidden")}
+function showDash(pass){$("loginCard").classList.add("hidden");$("dashCard").classList.remove("hidden");$("statusPill").textContent=pass.disabled?"Disabled":pass.revoked?"Revoked":Date.now()>=pass.expiresAt?"Expired":"Active";$("statusPill").classList.toggle("expired",$("statusPill").textContent!=="Active");$("expiry").textContent=new Date(pass.expiresAt).toLocaleString();if(timer)clearInterval(timer);const tick=()=>{const seconds=Math.max(0,Math.floor((pass.expiresAt-Date.now())/1000));if(pass.disabled||pass.revoked||seconds<=0){$("countdown").textContent="00d 00h 00m 00s";$("statusPill").textContent=pass.disabled?"Disabled":pass.revoked?"Revoked":"Expired";$("statusPill").classList.add("expired");clearInterval(timer);return}let s=seconds;const d=Math.floor(s/86400);s%=86400;const h=Math.floor(s/3600);s%=3600;const m=Math.floor(s/60);s%=60;$("countdown").textContent=`${d}d ${String(h).padStart(2,"0")}h ${String(m).padStart(2,"0")}m ${String(s).padStart(2,"0")}s`};tick();timer=setInterval(tick,1000)}
+$("loginForm").addEventListener("submit",e=>{e.preventDefault();const code=$("passcode").value.trim();const passes=readPasses(),p=passes.find(x=>x.passcode===code);if(!p){msg("loginMsg","Invalid passcode.",true);return}if(p.disabled||p.revoked){msg("loginMsg","This pass is disabled or revoked.",true);return}if(p.startedAt&&Date.now()>=p.expiresAt){msg("loginMsg","This pass has expired.",true);return}if(!p.startedAt){p.startedAt=Date.now();p.expiresAt=p.startedAt+p.durationMs;savePasses(passes)}sessionStorage.setItem(SESSION,p.passcode);$("passcode").value="";showDash(p)});
+$("logoutBtn").addEventListener("click",()=>{sessionStorage.removeItem(SESSION);showLogin()});
+$("happBtn").addEventListener("click",()=>{msg("happMsg","Opening HAPP. If it does not open, install HAPP and use this config URL: https://gtoools.site/FB/config.json");location.href="happ://add/https://gtoools.site/FB/config.json#AHAD%20VAI%20PROXY"});
+function restore(){const code=sessionStorage.getItem(SESSION);if(!code)return;const p=readPasses().find(x=>x.passcode===code);if(p&&!p.disabled&&!p.revoked&&p.expiresAt>Date.now())showDash(p);else{sessionStorage.removeItem(SESSION);showLogin()}}restore();
+</script></body></html>
