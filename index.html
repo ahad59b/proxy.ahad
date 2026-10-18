@@ -222,7 +222,7 @@ footer {
     </p>
 
     <button class="primary" id="happBtn" type="button">
-      CONNECT M1NX VIP
+      CONNECT  AHAD VIP
     </button>
 
     <div id="happMsg" class="msg hidden"
@@ -475,26 +475,13 @@ $("logoutBtn").addEventListener("click", () => {
 });
 
 $("happBtn").addEventListener("click", () => {
-  try {
-    showMessage("happMsg", "Opening M1NX VIP...");
+  const importUrl =
+    "v2raytun://import/" + encodeURIComponent(PROXY_LINK);
 
-    window.location.href = PROXY_LINK;
+  showMessage("happMsg", "Opening V2RayTun to import  AHAD VIP...");
 
-    setTimeout(() => {
-      showMessage(
-        "happMsg",
-        "If no app opened, install or open a compatible Hysteria 2 client and import the link."
-      );
-    }, 1800);
-
-  } catch (err) {
-    showMessage(
-      "happMsg",
-      err?.message || "Could not open the proxy link.",
-      true
-    );
-  }
+  window.location.href = importUrl;
 });
 </script>
 </body>
-</html>
+      </html>
