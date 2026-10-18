@@ -1,7 +1,7 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#071719">
 <title>AHAD VAI PROXY</title>
@@ -9,234 +9,476 @@
 <style>
 :root {
   color-scheme: dark;
-  --bg: #071719;
-  --panel: #102629;
   --teal: #35e0c0;
   --muted: #a4bfbd;
-  --line: #244447;
+  --line: #285052;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
   min-height: 100vh;
-  padding: 22px;
+  padding: 24px 16px;
   display: grid;
   place-items: center;
-  background: radial-gradient(
-    ellipse at top,
-    #123638 0%,
-    #071719 65%
-  );
-  font: 16px/1.5 system-ui, sans-serif;
+  font: 16px/1.6 system-ui, sans-serif;
   color: #effffb;
+  background:
+    radial-gradient(ellipse at top, #15504b, transparent 55%),
+    linear-gradient(145deg, #071719, #091e20 55%, #061214);
 }
 
-main {
-  width: min(100%, 520px);
-}
+main { width: min(100%, 460px); }
 
 .brand {
   text-align: center;
+  margin: 0;
+  font-size: clamp(28px, 7vw, 38px);
+  font-weight: 950;
+  letter-spacing: 1px;
   color: var(--teal);
-  font-size: clamp(1.7rem, 6vw, 2.3rem);
-  font-weight: 900;
-  letter-spacing: .06em;
-  margin: 0 0 5px;
+  text-shadow: 0 0 24px #35e0c044;
 }
 
 .sub {
   text-align: center;
   color: var(--muted);
-  margin: 0 0 25px;
+  margin: 4px 0 28px;
+  font-size: 13px;
+  letter-spacing: 1.5px;
 }
 
 .card {
-  padding: 28px;
-  border: 1px solid var(--line);
-  border-radius: 22px;
-  background: linear-gradient(160deg, #102a2c, #0b1d1f);
-  box-shadow: 0 20px 65px #0006;
+  padding: clamp(22px, 6vw, 30px);
+  border: 1px solid #35e0c044;
+  border-radius: 24px;
+  background: linear-gradient(145deg, #122e30f5, #0a1c1ef7);
+  box-shadow: 0 24px 80px #0006;
+  animation: appear .4s ease-out;
 }
 
-.icon {
-  width: 76px;
-  height: 76px;
-  margin: 0 auto 18px;
-  display: grid;
-  place-items: center;
-  border-radius: 22px;
-  background: #123f36;
-  border: 1px solid #267567;
-  font-size: 36px;
+@keyframes appear {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-h2 {
-  text-align: center;
-  margin: 0 0 8px;
-}
+h2 { margin: 0 0 6px; font-size: 24px; }
 
-.description {
-  text-align: center;
-  color: var(--muted);
-  margin: 0 0 25px;
-}
+.muted { color: var(--muted); font-size: 13px; }
 
-.info {
-  padding: 17px;
-  margin: 20px 0;
-  border: 1px solid var(--line);
-  background: #091a1c;
-  border-radius: 14px;
-  text-align: center;
-}
-
-.info strong {
-  color: var(--teal);
+label {
   display: block;
-  margin-bottom: 5px;
-  font-size: 1.1rem;
+  margin: 18px 0 7px;
+  font-size: 14px;
+  font-weight: 700;
 }
 
-.info span {
-  color: var(--muted);
-  font-size: .92rem;
+input {
+  display: block;
+  width: 100%;
+  padding: 14px 15px;
+  border: 1px solid #315456;
+  border-radius: 13px;
+  outline: none;
+  background: #071719;
+  color: white;
+  font: inherit;
+}
+
+input:focus {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px #35e0c018;
 }
 
 button {
   width: 100%;
   min-height: 50px;
-  padding: 14px;
+  margin-top: 18px;
+  padding: 13px;
   border: 0;
-  border-radius: 12px;
-  font: inherit;
-  font-weight: 800;
+  border-radius: 13px;
+  font: 800 15px system-ui, sans-serif;
   cursor: pointer;
+  transition: transform .2s, opacity .2s;
 }
+
+button:active { transform: scale(.98); }
+button:disabled { opacity: .55; cursor: wait; }
 
 .primary {
-  background: var(--teal);
-  color: #06201e;
+  color: #06201d;
+  background: linear-gradient(100deg, #35e0c0, #73f5d9);
+  box-shadow: 0 8px 25px #35e0c020;
 }
 
-.primary:active {
-  transform: scale(.98);
+.secondary {
+  margin-top: 12px;
+  color: #eafffa;
+  background: #18383a;
+  border: 1px solid #315456;
 }
+
+.hidden { display: none !important; }
 
 .msg {
-  margin-top: 14px;
-  padding: 12px;
-  border-radius: 10px;
-  background: #183537;
-  color: #e6fffa;
-  text-align: center;
+  margin-top: 15px;
+  padding: 12px 14px;
+  border: 1px solid #35e0c033;
+  border-radius: 12px;
+  background: #102d2e;
+  font-size: 13px;
   overflow-wrap: anywhere;
 }
 
-.msg a {
+.error {
+  color: #ffdada;
+  background: #401e24;
+  border-color: #79323b;
+}
+
+.stat {
+  padding: 17px;
+  margin-top: 14px;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: #091a1c;
+}
+
+.stat small {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--muted);
+}
+
+.stat strong { overflow-wrap: anywhere; }
+
+.time {
   color: var(--teal);
+  font-size: clamp(23px, 6vw, 29px);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
   overflow-wrap: anywhere;
 }
 
 footer {
   text-align: center;
   color: #73918f;
-  font-size: .8rem;
-  margin-top: 20px;
-}
-
-@media (max-width: 400px) {
-  .card {
-    padding: 20px;
-  }
+  font-size: 12px;
+  margin-top: 22px;
 }
 </style>
 </head>
 
 <body>
 <main>
+  <header>
+    <h1 class="brand">AHAD VAI PROXY</h1>
+    <p class="sub">SECURE SUBSCRIPTION ACCESS</p>
+  </header>
 
-  <h1 class="brand">AHAD VAI PROXY</h1>
-  <p class="sub">Your Proxy Dashboard</p>
+  <section class="card" id="loginCard">
+    <h2>Welcome Back</h2>
+    <p class="muted">Enter your username and password to continue.</p>
 
-  <section class="card">
+    <form id="loginForm">
+      <label for="username">Username</label>
+      <input id="username" type="text"
+        autocomplete="username" maxlength="64" required>
 
-    <div class="icon">⚡</div>
+      <label for="passcode">Password</label>
+      <input id="passcode" type="password"
+        autocomplete="current-password" maxlength="128" required>
 
-    <h2>Welcome Back!</h2>
+      <button class="primary" id="loginBtn" type="submit">
+        SIGN IN
+      </button>
+    </form>
 
-    <p class="description">
-      Welcome to AHAD VAI PROXY.
-      Connect your configuration using HAPP.
-    </p>
+    <div id="loginMsg" class="msg hidden"
+      role="status" aria-live="polite"></div>
+  </section>
 
-    <div class="info">
-      <strong>AHAD VAI PROXY</strong>
-      <span>Proxy Configuration</span>
+  <section class="card hidden" id="dashCard">
+    <h2>Your Subscription</h2>
+    <p class="muted">Welcome to AHAD VAI PROXY.</p>
+
+    <div class="stat">
+      <small>Account Status</small>
+      <strong id="status">Active</strong>
     </div>
 
-    <button
-      class="primary"
-      id="happBtn"
-      type="button">
+    <div class="stat">
+      <small>Remaining Time</small>
+      <div id="countdown" class="time">--d --h --m --s</div>
+    </div>
+
+    <div class="stat">
+      <small>Expiration Date</small>
+      <strong id="expiry">—</strong>
+    </div>
+
+    <p class="muted">
+      Your subscription timer continues running after logout.
+    </p>
+
+    <button class="primary" id="happBtn" type="button">
       ADD TO HAPP
     </button>
 
-    <div
-      id="happMsg"
-      class="msg"
-      hidden
-      role="status"
-      aria-live="polite">
-    </div>
+    <div id="happMsg" class="msg hidden"
+      role="status" aria-live="polite"></div>
 
+    <button class="secondary" id="logoutBtn" type="button">
+      LOG OUT
+    </button>
   </section>
 
-  <footer>
-    AHAD VAI PROXY · Proxy Dashboard
-  </footer>
-
+  <footer>AHAD VAI PROXY · Secure Pass Access</footer>
 </main>
 
-<script>
-"use strict";
+<script type="module">
+import { initializeApp }
+  from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
 
-const configUrl = "https://gtoools.site/FB/config.json";
+import { getDatabase, ref, get, update }
+  from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
 
-const happUrl =
-  "happ://add/" +
-  configUrl +
-  "#AHAD%20VAI%20PROXY";
+const firebaseConfig = {
+  apiKey: "AIzaSyBsJAwy-atWtIFQC9ICA3cLsiwiXMAri8w",
+  authDomain: "panelmy-445c3.firebaseapp.com",
+  databaseURL: "https://panelmy-445c3-default-rtdb.firebaseio.com",
+  projectId: "panelmy-445c",
+  storageBucket: "panelmy-445c.firebasestorage.app",
+  messagingSenderId: "787872581531",
+  appId: "1:787872581531:web:cab3195b1f839f56aac33e",
+  measurementId: "G-J84192EWVR"
+};
 
-const button = document.getElementById("happBtn");
-const message = document.getElementById("happMsg");
+const CONFIG_URL = "https://gtoools.site/FB/config.json";
 
-button.addEventListener("click", function () {
-  message.hidden = false;
-  message.textContent =
-    "Opening HAPP... Please wait.";
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
-  window.location.href = happUrl;
+const $ = id => document.getElementById(id);
 
-  setTimeout(function () {
-    message.replaceChildren(
-      document.createTextNode(
-        "If HAPP did not open, install or update HAPP, " +
-        "then open this configuration URL manually: "
-      ),
-      document.createElement("br"),
-      document.createElement("a")
+let expiryMs = 0;
+let countdownTimer = null;
+
+function showMessage(id, text, error = false) {
+  const el = $(id);
+  el.textContent = text;
+  el.classList.remove("hidden", "error");
+  if (error) el.classList.add("error");
+}
+
+function showLogin() {
+  $("loginCard").classList.remove("hidden");
+  $("dashCard").classList.add("hidden");
+
+  if (countdownTimer) clearInterval(countdownTimer);
+  countdownTimer = null;
+}
+
+function parseValidity(value) {
+  // Format: DD-MM-YYYY HH:mm
+  const match = String(value || "").match(
+    /^(\d{2})-(\d{2})-(\d{4})\s+(\d{2}):(\d{2})$/
+  );
+
+  if (!match) return NaN;
+
+  const [, dd, mm, yyyy, hh, min] = match;
+
+  const date = new Date(
+    Number(yyyy), Number(mm) - 1, Number(dd),
+    Number(hh), Number(min)
+  );
+
+  if (
+    date.getFullYear() !== Number(yyyy) ||
+    date.getMonth() !== Number(mm) - 1 ||
+    date.getDate() !== Number(dd) ||
+    date.getHours() !== Number(hh) ||
+    date.getMinutes() !== Number(min)
+  ) return NaN;
+
+  return date.getTime();
+}
+
+function renderStatus(expiry) {
+  $("loginCard").classList.add("hidden");
+  $("dashCard").classList.remove("hidden");
+
+  expiryMs = expiry;
+  $("status").textContent = "Active";
+  $("expiry").textContent = new Date(expiry).toLocaleString();
+
+  if (countdownTimer) clearInterval(countdownTimer);
+
+  function tick() {
+    let seconds = Math.max(
+      0, Math.floor((expiryMs - Date.now()) / 1000)
     );
 
-    const link = message.querySelector("a");
-    link.href = configUrl;
-    link.textContent = configUrl;
-  }, 1800);
+    if (seconds <= 0) {
+      clearInterval(countdownTimer);
+      countdownTimer = null;
+      showLogin();
+
+      showMessage(
+        "loginMsg",
+        "This account has expired. Please contact the administrator.",
+        true
+      );
+      return;
+    }
+
+    const days = Math.floor(seconds / 86400);
+    seconds %= 86400;
+
+    const hours = Math.floor(seconds / 3600);
+    seconds %= 3600;
+
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+
+    $("countdown").textContent =
+      `${days}d ${String(hours).padStart(2, "0")}h ` +
+      `${String(minutes).padStart(2, "0")}m ` +
+      `${String(secs).padStart(2, "0")}s`;
+  }
+
+  tick();
+  countdownTimer = setInterval(tick, 1000);
+}
+
+$("loginForm").addEventListener("submit", async event => {
+  event.preventDefault();
+
+  const btn = $("loginBtn");
+  btn.disabled = true;
+  btn.textContent = "CHECKING...";
+
+  let timeoutId;
+
+  try {
+    const username = $("username").value.trim();
+    const password = $("passcode").value;
+
+    if (!username || !password) {
+      throw new Error("Enter username and password.");
+    }
+
+    const snapshot = await Promise.race([
+      get(ref(db, "userinfo/" + username)),
+      new Promise((_, reject) => {
+        timeoutId = setTimeout(
+          () => reject(new Error(
+            "Firebase timeout. Check internet and database rules."
+          )),
+          12000
+        );
+      })
+    ]);
+
+    if (!snapshot.exists()) {
+      throw new Error("Username not found.");
+    }
+
+    const user = snapshot.val();
+
+    if (
+      String(user.username || username) !== username ||
+      String(user.password || "") !== password
+    ) {
+      throw new Error("Incorrect username or password.");
+    }
+
+    if (String(user.status || "").toLowerCase() !== "active") {
+      throw new Error("Account inactive. Contact the administrator.");
+    }
+
+    let validityValue = user.validity;
+
+    // First login check: If first_login is false, calculate expiration from current moment
+    if (user.first_login === false || Number.isNaN(parseValidity(validityValue))) {
+      let parts = String(validityValue || "30 days").trim().split(" ");
+      let num = parseFloat(parts[0]) || 30;
+      let unit = (parts[1] || "days").toLowerCase();
+
+      let targetDate = new Date();
+      if (unit.startsWith("hour")) {
+        targetDate.setTime(targetDate.getTime() + (num * 60 * 60 * 1000));
+      } else {
+        targetDate.setTime(targetDate.getTime() + (num * 24 * 60 * 60 * 1000));
+      }
+
+      const pad = n => String(n).padStart(2, "0");
+      validityValue = `${pad(targetDate.getDate())}-${pad(targetDate.getMonth() + 1)}-${targetDate.getFullYear()} ${pad(targetDate.getHours())}:${pad(targetDate.getMinutes())}`;
+
+      // Update Firebase database so timer starts permanently from this first login
+      await update(ref(db, "userinfo/" + username), {
+        validity: validityValue,
+        first_login: true
+      });
+    }
+
+    const expiry = parseValidity(validityValue);
+
+    if (!Number.isFinite(expiry)) {
+      throw new Error(
+        "Invalid expiry date. Save the user again in Admin Panel."
+      );
+    }
+
+    if (Date.now() >= expiry) {
+      throw new Error("This account has expired.");
+    }
+
+    $("passcode").value = "";
+    $("loginMsg").classList.add("hidden");
+    renderStatus(expiry);
+
+  } catch (err) {
+    const message =
+      err?.code === "PERMISSION_DENIED"
+        ? "Firebase permission denied. Check database rules."
+        : (err?.message || "Login failed.");
+
+    showMessage("loginMsg", message, true);
+
+  } finally {
+    clearTimeout(timeoutId);
+    btn.disabled = false;
+    btn.textContent = "SIGN IN";
+  }
+});
+
+$("logoutBtn").addEventListener("click", () => {
+  showLogin();
+  $("passcode").value = "";
+});
+
+$("happBtn").addEventListener("click", () => {
+  try {
+    const config = new URL(CONFIG_URL);
+
+    if (config.protocol !== "https:") {
+      throw new Error("HTTPS configuration URL required.");
+    }
+
+    const happUrl =
+      "happ://add/" + CONFIG_URL + "#AHAD VAI PROXY";
+
+    showMessage("happMsg", "Opening HAPP...");
+
+    window.location.href = happUrl;
+
+  } catch (err) {
+    showMessage("happMsg", err.message, true);
+  }
 });
 </script>
-
 </body>
-  </html>
+</html>
