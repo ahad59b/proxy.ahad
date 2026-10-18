@@ -64,7 +64,6 @@ main { width: min(100%, 460px); }
 }
 
 h2 { margin: 0 0 6px; font-size: 24px; }
-
 .muted { color: var(--muted); font-size: 13px; }
 
 label {
@@ -223,7 +222,7 @@ footer {
     </p>
 
     <button class="primary" id="happBtn" type="button">
-      ADD TO HAPP
+      CONNECT M1NX VIP
     </button>
 
     <div id="happMsg" class="msg hidden"
@@ -241,8 +240,9 @@ footer {
 import { initializeApp }
   from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
 
-import { getDatabase, ref, get, update }
-  from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
+import {
+  getDatabase, ref, get, update
+} from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBsJAwy-atWtIFQC9ICA3cLsiwiXMAri8w",
@@ -255,12 +255,13 @@ const firebaseConfig = {
   measurementId: "G-J84192EWVR"
 };
 
-const CONFIG_URL = "https://gtoools.site/FB/config.json";
-
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 const $ = id => document.getElementById(id);
+
+const PROXY_LINK =
+  "hysteria2://SLTX-2E9C-B28C-5464@wraith-bom3.silentx.store:443?alpn=h3&sni=wraith-bom3.silentx.store#M1NX%20VIP";
 
 let expiryMs = 0;
 let countdownTimer = null;
@@ -281,7 +282,6 @@ function showLogin() {
 }
 
 function parseValidity(value) {
-  // Format: DD-MM-YYYY HH:mm
   const match = String(value || "").match(
     /^(\d{2})-(\d{2})-(\d{4})\s+(\d{2}):(\d{2})$/
   );
@@ -401,23 +401,37 @@ $("loginForm").addEventListener("submit", async event => {
 
     let validityValue = user.validity;
 
-    // First login check: If first_login is false, calculate expiration from current moment
-    if (user.first_login === false || Number.isNaN(parseValidity(validityValue))) {
-      let parts = String(validityValue || "30 days").trim().split(" ");
-      let num = parseFloat(parts[0]) || 30;
-      let unit = (parts[1] || "days").toLowerCase();
+    if (
+      user.first_login === false ||
+      Number.isNaN(parseValidity(validityValue))
+    ) {
+      const parts = String(validityValue || "30 days")
+        .trim().split(" ");
 
-      let targetDate = new Date();
+      const num = parseFloat(parts[0]) || 30;
+      const unit = (parts[1] || "days").toLowerCase();
+
+      const targetDate = new Date();
+
       if (unit.startsWith("hour")) {
-        targetDate.setTime(targetDate.getTime() + (num * 60 * 60 * 1000));
+        targetDate.setTime(
+          targetDate.getTime() + num * 60 * 60 * 1000
+        );
       } else {
-        targetDate.setTime(targetDate.getTime() + (num * 24 * 60 * 60 * 1000));
+        targetDate.setTime(
+          targetDate.getTime() + num * 24 * 60 * 60 * 1000
+        );
       }
 
       const pad = n => String(n).padStart(2, "0");
-      validityValue = `${pad(targetDate.getDate())}-${pad(targetDate.getMonth() + 1)}-${targetDate.getFullYear()} ${pad(targetDate.getHours())}:${pad(targetDate.getMinutes())}`;
 
-      // Update Firebase database so timer starts permanently from this first login
+      validityValue =
+        `${pad(targetDate.getDate())}-` +
+        `${pad(targetDate.getMonth() + 1)}-` +
+        `${targetDate.getFullYear()} ` +
+        `${pad(targetDate.getHours())}:` +
+        `${pad(targetDate.getMinutes())}`;
+
       await update(ref(db, "userinfo/" + username), {
         validity: validityValue,
         first_login: true
@@ -462,21 +476,23 @@ $("logoutBtn").addEventListener("click", () => {
 
 $("happBtn").addEventListener("click", () => {
   try {
-    const config = new URL(CONFIG_URL);
+    showMessage("happMsg", "Opening M1NX VIP...");
 
-    if (config.protocol !== "https:") {
-      throw new Error("HTTPS configuration URL required.");
-    }
+    window.location.href = PROXY_LINK;
 
-    const happUrl =
-      "happ://add/" + CONFIG_URL + "#AHAD VAI PROXY";
-
-    showMessage("happMsg", "Opening HAPP...");
-
-    window.location.href = happUrl;
+    setTimeout(() => {
+      showMessage(
+        "happMsg",
+        "If no app opened, install or open a compatible Hysteria 2 client and import the link."
+      );
+    }, 1800);
 
   } catch (err) {
-    showMessage("happMsg", err.message, true);
+    showMessage(
+      "happMsg",
+      err?.message || "Could not open the proxy link.",
+      true
+    );
   }
 });
 </script>
